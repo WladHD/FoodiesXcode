@@ -21,35 +21,44 @@ struct NewErnaehrungsplanMengeView: View {
     var ernaehrungsPlan:Bool = true
     
     var body: some View {
-        VStack(spacing: 50) {
-            Text("Bitte gebe die Menge für \(lebensmittel.name!) an")
-            
-            TextField("Menge in \(LebensmittelHelper.getEinheit(lebensmittel: lebensmittel))", text: $menge)
-                .keyboardType(.numberPad)
-                .onReceive(Just(menge)) { newValue in
-                    let filtered = newValue.filter { "0123456789".contains($0) }
-                    if filtered != newValue {
-                        self.menge = filtered
-                    }
+        VStack() {
+            Form {
+                Section {
+                    Text("Bitte gebe die Menge für \(lebensmittel.name!) an")
+                        .multilineTextAlignment(.center)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                    
+                    TextField("Menge in \(LebensmittelHelper.getEinheit(lebensmittel: lebensmittel))", text: $menge)
+                        .keyboardType(.numberPad)
+                        .onReceive(Just(menge)) { newValue in
+                            let filtered = newValue.filter { "0123456789".contains($0) }
+                            if filtered != newValue {
+                                self.menge = filtered
+                            }
+                        }
+                        .multilineTextAlignment(.center)
+                    
                 }
-                .multilineTextAlignment(.center)
+                Section {
+                    Button("Speichern") {
+                        onSavePress()
+                    }
+                    .alert(isPresented: $showingAlert) {
+                        Alert(
+                            title: Text("Fehler"),
+                            message: Text("Menge darf nicht leer sein")
+                        )
+                    }
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .clipShape(Capsule())
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                }
+                
+            }
             
-            Button("Speichern") {
-                onSavePress()
-            }
-            .alert(isPresented: $showingAlert) {
-                Alert(
-                    title: Text("Fehler"),
-                    message: Text("Menge darf nicht leer sein")
-                )
-            }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .clipShape(Capsule())
-        }
-        .padding(.top)
-        .navigationTitle("Mengenangabe")
+        }.navigationTitle("Mengenangabe")
     }
     
     private func onSavePress() {

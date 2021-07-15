@@ -1,8 +1,6 @@
 import SwiftUI
 
 struct ErnaehrungsplanView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    
     @FetchRequest(sortDescriptors: [])
     private var ernaehrungsplan: FetchedResults<LebensmittelMenge>
     
@@ -20,13 +18,12 @@ struct ErnaehrungsplanView: View {
                     List {
                         Section(header: Text("Mein Ernährungsplan")) {
                             ForEach(ernaehrungsplan) { eintrag in
-                                HStack {
-                                    Text("\(Int(eintrag.menge))\(LebensmittelHelper.getEinheit(lebensmittel: eintrag.lebensmittel!))")
-                                    Text(eintrag.lebensmittel?.name ?? "Fehler")
-                                    Text(" \(LebensmittelMengeHelper.getKalorien(eintrag: eintrag))kcal")
-                                        .fontWeight(.light)
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
-                                }
+                                LebensmittelRowView(
+                                    menge: eintrag.menge,
+                                    einheit: LebensmittelHelper.getEinheit(lebensmittel: eintrag.lebensmittel!),
+                                    name: eintrag.lebensmittel!.name!,
+                                    kalorien: LebensmittelMengeHelper.getKalorien(eintrag: eintrag)
+                                )
                             }
                             .onDelete(perform: deleteEintrag)
                         }
@@ -34,7 +31,7 @@ struct ErnaehrungsplanView: View {
                     .frame(width: UIScreen.main.bounds.width)
                     .listStyle(GroupedListStyle())
                     .id(refreshID)
-                    .onReceive(self.didSave) { _ in   //the listener
+                    .onReceive(self.didSave) { _ in
                         self.refreshID = UUID()
                     }
                     
@@ -57,8 +54,8 @@ struct ErnaehrungsplanView: View {
     
     private func deleteEintrag(offsets: IndexSet) {
         withAnimation {
-            offsets.map { ernaehrungsplan[$0] }.forEach(viewContext.delete)
-            DataHelper.save(viewContext: viewContext)
+            offsets.map { ernaehrungsplan[$0] }.forEach(DatabaseHelper.getInstance().getViewContext().delete)
+            DatabaseHelper.getInstance().save()
         }
     }
 }

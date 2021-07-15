@@ -1,7 +1,15 @@
 import CoreData
 
-struct PersistanceContainer {
-    static let shared = PersistanceContainer()
+struct DatabaseHelper {
+    private static var inst:DatabaseHelper? = nil
+    
+    public static func getInstance() -> DatabaseHelper {
+        if(inst == nil) {
+            inst = DatabaseHelper()
+        }
+        
+        return inst!;
+    }
     
     let container: NSPersistentContainer
     
@@ -15,22 +23,26 @@ struct PersistanceContainer {
         }
     }
     
-    func save(completion: @escaping (Error?) -> () = {_ in}) {
+    func getViewContext() -> NSManagedObjectContext {
+        return container.viewContext;
+    }
+    
+    func save() {
         let context = container.viewContext
         
         if(context.hasChanges) {
             do {
                 try context.save()
-                completion(nil)
             } catch {
-                completion(error)
+                let error = error as NSError
+                fatalError("Error: \(error)")
             }
         }
     }
     
-    func delete(_ object: NSManagedObject, completion: @escaping (Error?) -> () = {_ in}) {
+    func delete(_ object: NSManagedObject) {
         let context = container.viewContext
         context.delete(object)
-        save(completion: completion)
+        save()
     }
 }

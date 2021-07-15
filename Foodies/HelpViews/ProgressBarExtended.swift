@@ -1,10 +1,3 @@
-//
-//  ProgressBarExtended.swift
-//  Foodies
-//
-//  Created by WJ on 14.07.21.
-//
-
 import SwiftUI
 
 struct ProgressBarExtended: View {

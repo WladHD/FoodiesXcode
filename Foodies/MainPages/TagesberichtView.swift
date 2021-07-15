@@ -1,10 +1,3 @@
-//
-//  TagesberichtView.swift
-//  Foodies
-//
-//  Created by WJ on 14.07.21.
-//
-
 import SwiftUI
 
 struct TagesberichtView: View {
@@ -14,6 +7,8 @@ struct TagesberichtView: View {
     @FetchRequest(sortDescriptors: [])
     private var ernaehrungsplan: FetchedResults<LebensmittelMenge>
     
+    private var didSave =  NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)
+    @State private var refreshID = UUID()
     
     var body : some View {
         NavigationView {
@@ -29,32 +24,37 @@ struct TagesberichtView: View {
                                 let af:AllowedFood? = allowedToEat(lm: ep.lebensmittel!)
                                 
                                 if(af != nil) {
-                                    HStack {
-                                        
-                                        Text(af!.mengenformat)
-                                        Text(af!.name)
-                                        Text(" \(af!.kcal)kcal")
-                                            .fontWeight(.light)
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                    }
+                                    
+                                    LebensmittelRowView(
+                                        menge: af!.menge,
+                                        einheit: af!.einheit,
+                                        name: af!.name,
+                                        kalorien: af!.kcal
+                                    )
+                                    
+                                    
                                 }
                             }
                         }
                     }
                     .frame(width: UIScreen.main.bounds.width)
                     .listStyle(GroupedListStyle())
+                    .id(refreshID)
+                    .onReceive(self.didSave) { _ in
+                        self.refreshID = UUID()
+                    }
                 }
                 .padding(.top)
             }
-            
             .navigationTitle("Tagesbericht")
         }
     }
     
     struct AllowedFood {
         var name:String
-        var mengenformat:String
-        var kcal:String
+        var menge:Int64
+        var einheit:String
+        var kcal:Int64
     }
     
     private func allowedToEat(lm: Lebensmittel) -> AllowedFood? {
@@ -66,8 +66,9 @@ struct TagesberichtView: View {
         
         return AllowedFood(
             name: lm.name!,
-            mengenformat: String(menge) + LebensmittelHelper.getEinheit(lebensmittel: lm),
-            kcal: String(LebensmittelMengeHelper.getCustomKalorien(lebensmittel: lm, menge: menge))
+            menge: menge,
+            einheit: LebensmittelHelper.getEinheit(lebensmittel: lm),
+            kcal: LebensmittelMengeHelper.getCustomKalorien(lebensmittel: lm, menge: menge)
         )
     }
     

@@ -1,15 +1,8 @@
-//
-//  LebensmittelMengeHelper.swift
-//  Foodies
-//
-//  Created by WJ on 14.07.21.
-//
-
 import Foundation
 import SwiftUI
 import CoreData
 
-class LebensmittelMengeZeitHelper {
+struct LebensmittelMengeZeitHelper {
     /*
      mengeneinheit 1 = Angabe in g -> Kalorien pro 100g
      mengeneinheit 2 = Angabe in ml -> Kalorien pro 100ml

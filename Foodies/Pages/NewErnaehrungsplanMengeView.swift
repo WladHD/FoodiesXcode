@@ -1,18 +1,9 @@
-//
-//  NewErnährungsplanMengeView.swift
-//  Foodies
-//
-//  Created by WJ on 14.07.21.
-//
-
 import SwiftUI
 import Combine
 import CoreData
 
 struct NewErnaehrungsplanMengeView: View {
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
-    
-    @Environment(\.managedObjectContext) private var viewContext
     
     @State private var menge: String = "";
     @State private var showingAlert = false;
@@ -30,9 +21,9 @@ struct NewErnaehrungsplanMengeView: View {
                     
                     TextField("Menge in \(LebensmittelHelper.getEinheit(lebensmittel: lebensmittel))", text: $menge)
                         .keyboardType(.numberPad)
-                        .onReceive(Just(menge)) { newValue in
-                            let filtered = newValue.filter { "0123456789".contains($0) }
-                            if filtered != newValue {
+                        .onReceive(Just(menge)) { index in
+                            let filtered = index.filter { "0123456789".contains($0) }
+                            if filtered != index {
                                 self.menge = filtered
                             }
                         }
@@ -46,7 +37,7 @@ struct NewErnaehrungsplanMengeView: View {
                     .alert(isPresented: $showingAlert) {
                         Alert(
                             title: Text("Fehler"),
-                            message: Text("Menge darf nicht leer sein")
+                            message: Text("Menge darf nicht leer und muss eine Zahl sein")
                         )
                     }
                     .padding()
@@ -62,7 +53,7 @@ struct NewErnaehrungsplanMengeView: View {
     }
     
     private func onSavePress() {
-        if(menge.count == 0) {
+        if(menge.count == 0 || Int64(menge) == nil || Int64(menge)! <= 0) {
             self.showingAlert = true;
             return;
         }
@@ -78,17 +69,17 @@ struct NewErnaehrungsplanMengeView: View {
     }
     
     private func saveLebensmittelMengeZeit() {
-        let newLebensmittelMengeZeit = LebensmittelMengeZeit(context: viewContext)
+        let newLebensmittelMengeZeit = LebensmittelMengeZeit(context: DatabaseHelper.getInstance().getViewContext())
         newLebensmittelMengeZeit.lebensmittel = lebensmittel;
         newLebensmittelMengeZeit.menge = Int64(menge)!;
         newLebensmittelMengeZeit.zeitpunkt = Date()
         
-        DataHelper.save(viewContext: viewContext)
+        DatabaseHelper.getInstance().save()
     }
     
     private func saveLebensmittelMenge() {
         
-        let newLebensmittelMenge = lebensmittel.ernaehrungsplan == nil ? LebensmittelMenge(context: viewContext) : lebensmittel.ernaehrungsplan!;
+        let newLebensmittelMenge = lebensmittel.ernaehrungsplan == nil ? LebensmittelMenge(context: DatabaseHelper.getInstance().getViewContext()) : lebensmittel.ernaehrungsplan!;
         
         if(lebensmittel.ernaehrungsplan == nil) {
             newLebensmittelMenge.lebensmittel = lebensmittel;
@@ -98,7 +89,7 @@ struct NewErnaehrungsplanMengeView: View {
         }
         
         
-        DataHelper.save(viewContext: viewContext)
+        DatabaseHelper.getInstance().save()
     }
     
     struct NewErnaehrungsplanMengeView_Previews: PreviewProvider {

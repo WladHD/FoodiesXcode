@@ -9,17 +9,6 @@ import XCTest
 @testable import Foodies
 
 class FoodiesTests: XCTestCase {
-    
-    var app: XCUIApplication!
-    
-    // MARK: - XCTestCase
-    
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        app.launchArguments.append("--uitesting")
-    }
-    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }

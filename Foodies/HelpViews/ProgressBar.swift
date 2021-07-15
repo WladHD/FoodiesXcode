@@ -1,10 +1,3 @@
-//
-//  ProgressBar.swift
-//  Foodies
-//
-//  Created by WJ on 14.07.21.
-//
-
 import SwiftUI
 
 struct ProgressBar: View {
@@ -22,7 +15,7 @@ struct ProgressBar: View {
                 .foregroundColor(Color.green.opacity(0.9))
             
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .frame(width: step > width ? width : step, height: height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .frame(width: step > width ? width : (step < 0 ? 0 : step), height: height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                 .foregroundColor((progress > 100 ? .red : .blue))
         }
     }

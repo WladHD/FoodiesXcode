@@ -1,10 +1,3 @@
-//
-//  VerlaufView.swift
-//  Foodies
-//
-//  Created by WJ on 14.07.21.
-//
-
 import SwiftUI
 import CoreData
 
@@ -49,9 +42,6 @@ struct VerlaufView: View {
                         .foregroundColor(.black)
                     
                     
-                    
-                    //Text("Date is \(scopeDatum, formatter: dateFormatter)")
-                    
                     ProgressBarExtended(curKalorien: -1, maxKalorien: LebensmittelMengeZeitHelper.getComsumedCalories(day: scopeDatum, gesamtverlauf: gesamtverlaufMengeZeit))
                     
                     let bmi:BMIVerlauf? = BMIHelper.getClosestDateBelow(day: scopeDatum, gesamtverlauf: gesamtverlaufBMIVerlauf);
@@ -72,13 +62,14 @@ struct VerlaufView: View {
                         Section(header: Text("Was habe ich gegessen?")) {
                             ForEach(gesamtverlaufMengeZeit) { verlauf in
                                 if(Calendar.current.compare(verlauf.zeitpunkt!, to: scopeDatum, toGranularity: .day) == ComparisonResult.orderedSame) {
-                                    HStack {
-                                        Text("\(Int(verlauf.menge))\(LebensmittelHelper.getEinheit(lebensmittel: verlauf.lebensmittel!))")
-                                        Text(verlauf.lebensmittel?.name ?? "Fehler")
-                                        Text(" \(LebensmittelMengeZeitHelper.getKalorien(eintrag: verlauf))kcal")
-                                            .fontWeight(.light)
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                    }
+                                    
+                                    LebensmittelRowView(
+                                        menge: verlauf.menge,
+                                        einheit: LebensmittelHelper.getEinheit(lebensmittel: verlauf.lebensmittel!),
+                                        name: verlauf.lebensmittel!.name!,
+                                        kalorien: LebensmittelMengeZeitHelper.getKalorien(eintrag: verlauf)
+                                    )
+ 
                                 }
                             }
                         }
@@ -86,7 +77,7 @@ struct VerlaufView: View {
                     .frame(width: UIScreen.main.bounds.width)
                     .listStyle(GroupedListStyle())
                     .id(refreshID)
-                    .onReceive(self.didSave) { _ in   //the listener
+                    .onReceive(self.didSave) { _ in 
                         self.refreshID = UUID()
                     }
                     

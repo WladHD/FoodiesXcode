@@ -1,28 +1,31 @@
 import SwiftUI
 
 struct StartView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    
     var body: some View {
         TabView {
             TagesberichtView()
-                .tabItem {
-                    Image(systemName: "doc.text")
-                    Text("Tagesbericht")
-                }
+                .modifier(StartViewTab(img: "doc.text", txt: "Tagesbericht"))
             
             ErnaehrungsplanView()
-                .tabItem {
-                    Image(systemName: "heart.text.square")
-                    Text("Ernährungsplan")
-                }
+                .modifier(StartViewTab(img: "heart.text.square", txt: "Ernährungsplan"))
             
             VerlaufView()
-                .tabItem {
-                    Image(systemName: "clock.arrow.circlepath")
-                    Text("Verlauf")
-                }
+                .modifier(StartViewTab(img: "clock.arrow.circlepath", txt: "Verlauf"))
         }
+    }
+}
+
+struct StartViewTab: ViewModifier {
+    var img:String
+    var txt:String
+    
+    func body(content: Content) -> some View {
+        return content
+            .tabItem {
+                Image(systemName: img)
+                Text(txt)
+            }
+        ;
     }
 }
 

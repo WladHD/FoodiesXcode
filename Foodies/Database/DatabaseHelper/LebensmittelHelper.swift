@@ -1,14 +1,7 @@
-//
-//  LebensmittelHelper.swift
-//  Foodies
-//
-//  Created by WJ on 14.07.21.
-//
-
 import Foundation
 import CoreData
 
-class LebensmittelHelper {
+struct LebensmittelHelper {
     public static var kalProEinheitFormat = ["kcal pro 100g", "kcal pro 100ml", "kcal pro Stück"];
     
     public static func getEinheitDivisor(mengeneinheit: Int64) -> Int64 {

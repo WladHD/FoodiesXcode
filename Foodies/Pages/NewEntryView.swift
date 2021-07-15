@@ -1,10 +1,3 @@
-//
-//  NewEntryView.swift
-//  Foodies
-//
-//  Created by WJ on 14.07.21.
-//
-
 import SwiftUI
 
 struct NewEntryView: View {
@@ -26,11 +19,8 @@ struct NewEntryView: View {
                             .foregroundColor(.white)
                             .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                             .font(.title2)
-                        
                     }
-                    
                 }
-                
             }
             
             NavigationLink(

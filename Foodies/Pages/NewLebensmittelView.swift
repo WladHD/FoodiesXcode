@@ -1,10 +1,3 @@
-//
-//  NewLebensmittelView.swift
-//  Foodies
-//
-//  Created by WJ on 14.07.21.
-//
-
 import SwiftUI
 import CoreData
 import Combine
@@ -17,7 +10,6 @@ struct NewLebensmittelView: View {
     @State public var lebensmittelPreselect:Lebensmittel? = nil
     
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
-    @Environment(\.managedObjectContext) private var viewContext
     
     @State private var showingAlert = false;
     
@@ -27,7 +19,6 @@ struct NewLebensmittelView: View {
     
     var body: some View {
         VStack() {
-            
             Form {
                 Section {
                     TextField("Name", text: $name)
@@ -41,9 +32,9 @@ struct NewLebensmittelView: View {
                     
                     TextField("\(LebensmittelHelper.kalProEinheitFormat[mengeneinheit])", text: $kcal)
                         .keyboardType(.numberPad)
-                        .onReceive(Just(kcal)) { newValue in
-                            let filtered = newValue.filter { "0123456789".contains($0) }
-                            if filtered != newValue {
+                        .onReceive(Just(kcal)) { index in
+                            let filtered = index.filter { "0123456789".contains($0) }
+                            if filtered != index {
                                 self.kcal = filtered
                             }
                         }
@@ -83,7 +74,7 @@ struct NewLebensmittelView: View {
     }
     
     private func onSavePress() {
-        if(name.count == 0 || kcal.count == 0) {
+        if(name.count == 0 || kcal.count == 0 || Int64(kcal) == nil || Int64(kcal)! <= 0) {
             showingAlert = true;
             return;
         } else {
@@ -93,14 +84,14 @@ struct NewLebensmittelView: View {
         lebensmittelPreselect = parseLebensmittel(pName: name)
         
         if(lebensmittelPreselect == nil) {
-            lebensmittelPreselect = Lebensmittel(context: viewContext);
+            lebensmittelPreselect = Lebensmittel(context: DatabaseHelper.getInstance().getViewContext());
         }
         
         lebensmittelPreselect?.name = name;
         lebensmittelPreselect?.kcal = Int64(kcal)!;
         lebensmittelPreselect?.mengeneinheit = Int64(mengeneinheit + 1);
         
-        DataHelper.save(viewContext: viewContext)
+        DatabaseHelper.getInstance().save()
         self.mode.wrappedValue.dismiss();
     }
 }

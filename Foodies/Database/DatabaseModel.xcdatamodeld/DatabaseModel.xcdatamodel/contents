@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20D91" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="BMIVerlauf" representedClassName="BMIVerlauf" syncable="YES" codeGenerationType="class">
+        <attribute name="gewicht" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="groesse" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="zeitpunkt" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="Lebensmittel" representedClassName="Lebensmittel" syncable="YES" codeGenerationType="class">
+        <attribute name="kcal" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="mengeneinheit" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <relationship name="ernaehrungsplan" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LebensmittelMenge" inverseName="lebensmittel" inverseEntity="LebensmittelMenge"/>
+        <relationship name="verlauf" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="LebensmittelMengeZeit" inverseName="lebensmittel" inverseEntity="LebensmittelMengeZeit"/>
+    </entity>
+    <entity name="LebensmittelMenge" representedClassName="LebensmittelMenge" syncable="YES" codeGenerationType="class">
+        <attribute name="menge" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="lebensmittel" maxCount="1" deletionRule="Nullify" destinationEntity="Lebensmittel" inverseName="ernaehrungsplan" inverseEntity="Lebensmittel"/>
+    </entity>
+    <entity name="LebensmittelMengeZeit" representedClassName="LebensmittelMengeZeit" syncable="YES" codeGenerationType="class">
+        <attribute name="menge" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="zeitpunkt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="lebensmittel" maxCount="1" deletionRule="Nullify" destinationEntity="Lebensmittel" inverseName="verlauf" inverseEntity="Lebensmittel"/>
+    </entity>
+    <elements>
+        <element name="BMIVerlauf" positionX="18" positionY="63" width="128" height="78"/>
+        <element name="Lebensmittel" positionX="-18" positionY="27" width="128" height="110"/>
+        <element name="LebensmittelMenge" positionX="-36" positionY="9" width="128" height="62"/>
+        <element name="LebensmittelMengeZeit" positionX="-54" positionY="-9" width="128" height="78"/>
+    </elements>
+</model>

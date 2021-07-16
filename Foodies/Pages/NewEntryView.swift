@@ -23,6 +23,7 @@ struct NewEntryView: View {
                 }
             }
             
+            
             NavigationLink(
                 destination: NewBMIView()) {
                 ZStack {

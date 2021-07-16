@@ -40,9 +40,8 @@ struct DatabaseHelper {
         }
     }
     
-    func delete(_ object: NSManagedObject) {
-        let context = container.viewContext
-        context.delete(object)
+    func delete(object: NSManagedObject) {
+        container.viewContext.delete(object)
         save()
     }
 }

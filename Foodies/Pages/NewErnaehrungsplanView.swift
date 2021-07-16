@@ -2,6 +2,8 @@ import SwiftUI
 import CoreData
 
 struct NewErnaehrungsplanView: View {
+    @ObservedObject
+    var lebensmittelManager: LebensmittelManager
     
     @FetchRequest(sortDescriptors: [])
     private var lebensmittel: FetchedResults<Lebensmittel>
@@ -20,7 +22,7 @@ struct NewErnaehrungsplanView: View {
                             
                             VStack {
                                 
-                                NavigationLink(destination: NewErnaehrungsplanMengeView(lebensmittel: lm, ernaehrungsPlan: ernaehrungsPlan)) {
+                                NavigationLink(destination: NewErnaehrungsplanMengeView(lebensmittelManager: lebensmittelManager,lebensmittel: lm, ernaehrungsPlan: ernaehrungsPlan)) {
                                     
                                     LebensmittelRowView(
                                         menge: -1,
@@ -43,7 +45,7 @@ struct NewErnaehrungsplanView: View {
             
             .navigationBarItems(
                 trailing: NavigationLink(
-                    destination: NewLebensmittelView(),
+                    destination: NewLebensmittelView(lebensmittelManager: lebensmittelManager),
                     label: {
                         Text("Neu")
                         Image(systemName: "plus")
@@ -58,6 +60,6 @@ struct NewErnaehrungsplanView: View {
 
 struct NewErnaehrungsplanView_Previews: PreviewProvider {
     static var previews: some View {
-        NewErnaehrungsplanView()
+        NewErnaehrungsplanView(lebensmittelManager: LebensmittelManager())
     }
 }

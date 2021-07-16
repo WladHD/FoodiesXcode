@@ -3,9 +3,12 @@ import CoreData
 import Combine
 
 struct NewBMIView: View {
+    @ObservedObject
+    var lebensmittelManager: LebensmittelManager
     
     @State public var groesse: String = "";
     @State public var gewicht: String = "";
+    @State var eMsg:String = ""
     
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     
@@ -45,7 +48,7 @@ struct NewBMIView: View {
                     .alert(isPresented: $showingAlert) {
                         Alert(
                             title: Text("Fehler"),
-                            message: Text("Größe und Gewicht müssen Zahlen und nicht leer sein")
+                            message: Text(eMsg)
                         )
                     }
                     .padding()
@@ -60,25 +63,20 @@ struct NewBMIView: View {
     }
     
     private func onSavePress() {
-        if(groesse.count == 0 || gewicht.count == 0 || Double(gewicht) == nil || Int64(groesse) == nil || Double(gewicht)! <= 0 || Int64(groesse)! <= 0) {
+        let err = lebensmittelManager.saveBMIHistory(gewicht: gewicht, groesse: groesse)
+        
+        if(err != nil) {
+            eMsg = err!
             showingAlert = true;
             return;
-        } else {
-            showingAlert = false;
         }
         
-        let bmiEintrag = BMIVerlauf(context: DatabaseHelper.getInstance().getViewContext());
-        bmiEintrag.gewicht = Double(gewicht)!
-        bmiEintrag.groesse = Int64(groesse)!
-        bmiEintrag.zeitpunkt = Date()
-        
-        DatabaseHelper.getInstance().save()
         self.mode.wrappedValue.dismiss();
     }
 }
 
 struct NewBMIView_Previews: PreviewProvider {
     static var previews: some View {
-        NewBMIView()
+        NewBMIView(lebensmittelManager: LebensmittelManager())
     }
 }

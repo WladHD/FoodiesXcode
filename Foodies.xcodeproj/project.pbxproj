@@ -11,6 +11,8 @@
 		37064CA8269F164A0091F5F7 /* LebensmittelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37064CA7269F164A0091F5F7 /* LebensmittelHelper.swift */; };
 		37064CAD269F17B00091F5F7 /* LebensmittelMengeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37064CAC269F17B00091F5F7 /* LebensmittelMengeHelper.swift */; };
 		37064CBF269F26430091F5F7 /* NewErnaehrungsplanMengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37064CBE269F26430091F5F7 /* NewErnaehrungsplanMengeView.swift */; };
+		371E84BA26A14D56001FE7F7 /* LebensmittelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371E84B926A14D56001FE7F7 /* LebensmittelManager.swift */; };
+		371E84C326A154C7001FE7F7 /* AllowedFood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371E84C226A154C7001FE7F7 /* AllowedFood.swift */; };
 		372521AC269EB02D00734903 /* FoodiesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372521AB269EB02D00734903 /* FoodiesApp.swift */; };
 		372521AE269EB02D00734903 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372521AD269EB02D00734903 /* StartView.swift */; };
 		372521B0269EB02D00734903 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 372521AF269EB02D00734903 /* Assets.xcassets */; };
@@ -55,6 +57,8 @@
 		37064CA7269F164A0091F5F7 /* LebensmittelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LebensmittelHelper.swift; sourceTree = "<group>"; };
 		37064CAC269F17B00091F5F7 /* LebensmittelMengeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LebensmittelMengeHelper.swift; sourceTree = "<group>"; };
 		37064CBE269F26430091F5F7 /* NewErnaehrungsplanMengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewErnaehrungsplanMengeView.swift; sourceTree = "<group>"; };
+		371E84B926A14D56001FE7F7 /* LebensmittelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LebensmittelManager.swift; sourceTree = "<group>"; };
+		371E84C226A154C7001FE7F7 /* AllowedFood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllowedFood.swift; sourceTree = "<group>"; };
 		372521A8269EB02D00734903 /* Foodies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Foodies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		372521AB269EB02D00734903 /* FoodiesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodiesApp.swift; sourceTree = "<group>"; };
 		372521AD269EB02D00734903 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
@@ -108,6 +112,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		371E84B826A14CBF001FE7F7 /* View Model */ = {
+			isa = PBXGroup;
+			children = (
+				371E84B926A14D56001FE7F7 /* LebensmittelManager.swift */,
+			);
+			path = "View Model";
+			sourceTree = "<group>";
+		};
+		371E84C126A154AD001FE7F7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				371E84C226A154C7001FE7F7 /* AllowedFood.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		3725219F269EB02D00734903 = {
 			isa = PBXGroup;
 			children = (
@@ -131,6 +151,8 @@
 		372521AA269EB02D00734903 /* Foodies */ = {
 			isa = PBXGroup;
 			children = (
+				371E84C126A154AD001FE7F7 /* Model */,
+				371E84B826A14CBF001FE7F7 /* View Model */,
 				3736D954269F852C000237C8 /* MainPages */,
 				372522C0269EEA3900734903 /* HelpViews */,
 				372522B4269EE9D200734903 /* Pages */,
@@ -363,6 +385,7 @@
 				37A3EB9226A0CE2F00A2CD7F /* LebensmittelRowView.swift in Sources */,
 				375F0ECE269F8BD700B230D9 /* LebensmittelMengeZeitHelper.swift in Sources */,
 				37064CA8269F164A0091F5F7 /* LebensmittelHelper.swift in Sources */,
+				371E84C326A154C7001FE7F7 /* AllowedFood.swift in Sources */,
 				372522CD269EECA000734903 /* ErnaehrungsplanView.swift in Sources */,
 				372522D2269EEDA600734903 /* ProgressBarExtended.swift in Sources */,
 				37064CAD269F17B00091F5F7 /* LebensmittelMengeHelper.swift in Sources */,
@@ -370,6 +393,7 @@
 				3736D959269F866C000237C8 /* VerlaufView.swift in Sources */,
 				372521AC269EB02D00734903 /* FoodiesApp.swift in Sources */,
 				37A3EB7D26A0C22800A2CD7F /* DatabaseHelper.swift in Sources */,
+				371E84BA26A14D56001FE7F7 /* LebensmittelManager.swift in Sources */,
 				37064CBF269F26430091F5F7 /* NewErnaehrungsplanMengeView.swift in Sources */,
 				375F0EDD269F9B6C00B230D9 /* BMIHelper.swift in Sources */,
 				37252252269EDA4000734903 /* DatabaseModel.xcdatamodeld in Sources */,

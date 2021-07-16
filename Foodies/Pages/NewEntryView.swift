@@ -1,10 +1,13 @@
 import SwiftUI
 
 struct NewEntryView: View {
+    @ObservedObject
+    var lebensmittelManager: LebensmittelManager
+    
     var body: some View {
         VStack {
             NavigationLink(
-                destination: NewErnaehrungsplanView(ernaehrungsPlan: false)) {
+                destination: NewErnaehrungsplanView(lebensmittelManager: lebensmittelManager,ernaehrungsPlan: false)) {
                 ZStack {
                     Rectangle()
                         .fill(Color.blue)
@@ -25,7 +28,7 @@ struct NewEntryView: View {
             
             
             NavigationLink(
-                destination: NewBMIView()) {
+                destination: NewBMIView(lebensmittelManager: lebensmittelManager)) {
                 ZStack {
                     Rectangle()
                         .fill(Color.blue)
@@ -51,6 +54,6 @@ struct NewEntryView: View {
 
 struct NewEntryView_Previews: PreviewProvider {
     static var previews: some View {
-        NewEntryView()
+        NewEntryView(lebensmittelManager: LebensmittelManager())
     }
 }

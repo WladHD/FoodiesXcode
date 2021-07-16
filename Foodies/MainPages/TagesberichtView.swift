@@ -1,13 +1,16 @@
 import SwiftUI
 
 struct TagesberichtView: View {
+    @ObservedObject
+    var lebensmittelManager: LebensmittelManager
+    
     @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "zeitpunkt", ascending: false)])
     private var gesamtverlaufMengeZeit: FetchedResults<LebensmittelMengeZeit>
     
     @FetchRequest(sortDescriptors: [])
     private var ernaehrungsplan: FetchedResults<LebensmittelMenge>
     
-    private var didSave =  NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)
+    var didSave =  NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)
     @State private var refreshID = UUID()
     
     var body : some View {
@@ -21,7 +24,7 @@ struct TagesberichtView: View {
                     List {
                         Section(header: Text("Was kann ich noch essen?")) {
                             ForEach(ernaehrungsplan) { ep in
-                                let af:AllowedFood? = allowedToEat(lm: ep.lebensmittel!)
+                                let af:AllowedFood? = lebensmittelManager.isAllowedToEat(lm: ep.lebensmittel!)
                                 
                                 if(af != nil) {
                                     
@@ -49,44 +52,10 @@ struct TagesberichtView: View {
             .navigationTitle("Tagesbericht")
         }
     }
-    
-    struct AllowedFood {
-        var name:String
-        var menge:Int64
-        var einheit:String
-        var kcal:Int64
-    }
-    
-    private func allowedToEat(lm: Lebensmittel) -> AllowedFood? {
-        let menge:Int64 = lm.ernaehrungsplan!.menge - eatenToday(lm: lm);
-        
-        if(menge <= 0) {
-            return nil;
-        }
-        
-        return AllowedFood(
-            name: lm.name!,
-            menge: menge,
-            einheit: LebensmittelHelper.getEinheit(lebensmittel: lm),
-            kcal: LebensmittelMengeHelper.getCustomKalorien(lebensmittel: lm, menge: menge)
-        )
-    }
-    
-    private func eatenToday(lm: Lebensmittel) -> Int64 {
-        var menge:Int64 = 0;
-        
-        for eintrag in gesamtverlaufMengeZeit {
-            if(eintrag.lebensmittel == lm && Calendar.current.compare(eintrag.zeitpunkt!, to: Date(), toGranularity: .day) == ComparisonResult.orderedSame) {
-                menge += eintrag.menge;
-            }
-        }
-        
-        return menge;
-    }
 }
 
 struct TagesberichtView_Previews: PreviewProvider {
     static var previews: some View {
-        TagesberichtView()
+        TagesberichtView(lebensmittelManager: LebensmittelManager())
     }
 }

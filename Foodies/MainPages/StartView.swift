@@ -1,15 +1,17 @@
 import SwiftUI
 
 struct StartView: View {
+    @StateObject var lebensmittelMengeManager = LebensmittelManager()
+    
     var body: some View {
         TabView {
-            TagesberichtView()
+            TagesberichtView(lebensmittelManager: lebensmittelMengeManager)
                 .modifier(StartViewTab(img: "doc.text", txt: "Tagesbericht"))
             
-            ErnaehrungsplanView()
+            ErnaehrungsplanView(lebensmittelManager: lebensmittelMengeManager)
                 .modifier(StartViewTab(img: "heart.text.square", txt: "Ernährungsplan"))
             
-            VerlaufView()
+            VerlaufView(lebensmittelManager: lebensmittelMengeManager)
                 .modifier(StartViewTab(img: "clock.arrow.circlepath", txt: "Verlauf"))
         }
     }

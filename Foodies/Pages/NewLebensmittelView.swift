@@ -3,19 +3,18 @@ import CoreData
 import Combine
 
 struct NewLebensmittelView: View {
+    @ObservedObject
+    var lebensmittelManager: LebensmittelManager
     
     @State public var kcal: String = "";
     @State public var name: String = "";
     @State public var mengeneinheit: Int = 0;
     @State public var lebensmittelPreselect:Lebensmittel? = nil
+    @State var eMsg:String = ""
     
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     
     @State private var showingAlert = false;
-    
-    @FetchRequest(sortDescriptors: [])
-    private var lebensmittel: FetchedResults<Lebensmittel>
-    
     
     var body: some View {
         VStack() {
@@ -49,7 +48,7 @@ struct NewLebensmittelView: View {
                     .alert(isPresented: $showingAlert) {
                         Alert(
                             title: Text("Fehler"),
-                            message: Text("Menge und Name dürfen nicht leer sein")
+                            message: Text(eMsg)
                         )
                     }
                     .padding()
@@ -63,41 +62,23 @@ struct NewLebensmittelView: View {
         
     }
     
-    private func parseLebensmittel(pName: String) -> Lebensmittel? {
-        for lm in lebensmittel {
-            if(pName.compare(lm.name!, options: .caseInsensitive) == ComparisonResult.orderedSame) {
-                return lm;
-            }
-        }
-        
-        return nil;
-    }
-    
     private func onSavePress() {
-        if(name.count == 0 || kcal.count == 0 || Int64(kcal) == nil || Int64(kcal)! <= 0) {
+        let err = lebensmittelManager.saveLebensmittel(name: name, kcal: kcal, mengeneinheit: Int64(mengeneinheit))
+        
+        if(err != nil) {
+            eMsg = err!
             showingAlert = true;
             return;
-        } else {
-            showingAlert = false;
         }
         
-        lebensmittelPreselect = parseLebensmittel(pName: name)
+        showingAlert = false
         
-        if(lebensmittelPreselect == nil) {
-            lebensmittelPreselect = Lebensmittel(context: DatabaseHelper.getInstance().getViewContext());
-        }
-        
-        lebensmittelPreselect?.name = name;
-        lebensmittelPreselect?.kcal = Int64(kcal)!;
-        lebensmittelPreselect?.mengeneinheit = Int64(mengeneinheit + 1);
-        
-        DatabaseHelper.getInstance().save()
         self.mode.wrappedValue.dismiss();
     }
 }
 
 struct NewLebensmittelView_Previews: PreviewProvider {
     static var previews: some View {
-        NewLebensmittelView()
+        NewLebensmittelView(lebensmittelManager: LebensmittelManager())
     }
 }

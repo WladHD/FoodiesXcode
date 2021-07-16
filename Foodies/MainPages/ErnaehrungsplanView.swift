@@ -1,10 +1,13 @@
 import SwiftUI
 
 struct ErnaehrungsplanView: View {
+    @ObservedObject
+    var lebensmittelManager: LebensmittelManager
+    
     @FetchRequest(sortDescriptors: [])
     private var ernaehrungsplan: FetchedResults<LebensmittelMenge>
     
-    private var didSave =  NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)
+    var didSave =  NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)
     @State private var refreshID = UUID()
     
     var body : some View {
@@ -25,7 +28,7 @@ struct ErnaehrungsplanView: View {
                                     kalorien: LebensmittelMengeHelper.getKalorien(eintrag: eintrag)
                                 )
                             }
-                            .onDelete(perform: deleteEintrag)
+                            .onDelete(perform: delete)
                         }
                     }
                     .frame(width: UIScreen.main.bounds.width)
@@ -43,7 +46,7 @@ struct ErnaehrungsplanView: View {
             .navigationTitle("Ernährungsplan")
             .navigationBarItems(
                 trailing: NavigationLink(
-                    destination: NewErnaehrungsplanView(),
+                    destination: NewErnaehrungsplanView(lebensmittelManager: lebensmittelManager),
                     label: {
                         Text("Hinzufügen")
                         Image(systemName: "plus")
@@ -52,16 +55,15 @@ struct ErnaehrungsplanView: View {
         }
     }
     
-    private func deleteEintrag(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { ernaehrungsplan[$0] }.forEach(DatabaseHelper.getInstance().getViewContext().delete)
-            DatabaseHelper.getInstance().save()
+    private func delete(offsets: IndexSet) {
+        for index in offsets {
+            lebensmittelManager.deleteLebensmittelMenge(lm: ernaehrungsplan[index])
         }
     }
 }
 
 struct ErnaehrungsplanView_Previews: PreviewProvider {
     static var previews: some View {
-        ErnaehrungsplanView()
+        ErnaehrungsplanView(lebensmittelManager: LebensmittelManager())
     }
 }

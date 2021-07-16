@@ -2,6 +2,9 @@ import SwiftUI
 import CoreData
 
 struct VerlaufView: View {
+    @ObservedObject
+    var lebensmittelManager: LebensmittelManager
+    
     @State private var maxKalorien: CGFloat = 2500;
     @State private var curKalorien: CGFloat = 1500;
     
@@ -20,7 +23,7 @@ struct VerlaufView: View {
     private var gesamtverlaufBMIVerlauf: FetchedResults<BMIVerlauf>
     
     
-    private var didSave =  NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)
+    var didSave =  NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)
     @State private var refreshID = UUID()
     
     
@@ -90,7 +93,7 @@ struct VerlaufView: View {
             .navigationTitle("Verlauf")
             .navigationBarItems(
                 trailing: NavigationLink(
-                    destination: NewEntryView(),
+                    destination: NewEntryView(lebensmittelManager: lebensmittelManager),
                     label: {
                         Text("Hinzufügen")
                         Image(systemName: "plus")
@@ -103,7 +106,7 @@ struct VerlaufView: View {
     
     struct VerlaufView_Previews: PreviewProvider {
         static var previews: some View {
-            VerlaufView()
+            VerlaufView(lebensmittelManager: LebensmittelManager())
         }
     }
 }

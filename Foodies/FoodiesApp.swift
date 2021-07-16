@@ -5,7 +5,7 @@ struct FoodiesApp: App {
     var body: some Scene {
         WindowGroup {
             StartView()
-                .environment(\.managedObjectContext, DatabaseHelper.getInstance().container.viewContext)
+                .environment(\.managedObjectContext, DatabaseManager.getInstance().container.viewContext)
         }
     }
     

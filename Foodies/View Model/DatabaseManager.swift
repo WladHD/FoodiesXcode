@@ -1,11 +1,11 @@
 import CoreData
 
-struct DatabaseHelper {
-    private static var inst:DatabaseHelper? = nil
+struct DatabaseManager {
+    private static var inst:DatabaseManager? = nil
     
-    public static func getInstance() -> DatabaseHelper {
+    public static func getInstance() -> DatabaseManager {
         if(inst == nil) {
-            inst = DatabaseHelper()
+            inst = DatabaseManager()
         }
         
         return inst!;

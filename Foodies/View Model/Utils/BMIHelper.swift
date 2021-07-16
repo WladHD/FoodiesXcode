@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 import CoreData
 
-struct BMIHelper {
+class BMIHelper {
     public static func getClosestDateBelow(day: Date, gesamtverlauf:FetchedResults<BMIVerlauf>) -> BMIVerlauf? {
 
         for bmieintrag in gesamtverlauf {

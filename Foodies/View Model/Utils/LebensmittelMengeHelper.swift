@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 import CoreData
 
-struct LebensmittelMengeHelper {
+class LebensmittelMengeHelper {
     /*
      mengeneinheit 1 = Angabe in g -> Kalorien pro 100g
      mengeneinheit 2 = Angabe in ml -> Kalorien pro 100ml

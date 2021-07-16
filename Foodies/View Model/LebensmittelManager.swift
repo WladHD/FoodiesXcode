@@ -7,7 +7,7 @@ class LebensmittelManager: ObservableObject {
      ADD / DELETE
      */
     func deleteLebensmittelMenge(lm: LebensmittelMenge) {
-        DatabaseHelper.getInstance().delete(object: lm)
+        DatabaseManager.getInstance().delete(object: lm)
     }
     
     func saveLebensmittelMengeZeit(lebensmittel: Lebensmittel, menge: String) -> String? {
@@ -23,12 +23,12 @@ class LebensmittelManager: ObservableObject {
     }
     
     func saveLebensmittelMengeZeit(lebensmittel: Lebensmittel, menge: Int64) {
-        let newLebensmittelMengeZeit = LebensmittelMengeZeit(context: DatabaseHelper.getInstance().getViewContext())
+        let newLebensmittelMengeZeit = LebensmittelMengeZeit(context: DatabaseManager.getInstance().getViewContext())
         newLebensmittelMengeZeit.lebensmittel = lebensmittel;
         newLebensmittelMengeZeit.menge = menge;
         newLebensmittelMengeZeit.zeitpunkt = Date()
         
-        DatabaseHelper.getInstance().save()
+        DatabaseManager.getInstance().save()
     }
     
     func saveLebensmittelMenge(lebensmittel: Lebensmittel, menge: String) -> String? {
@@ -44,7 +44,7 @@ class LebensmittelManager: ObservableObject {
     }
     
     func saveLebensmittelMenge(lebensmittel: Lebensmittel, menge: Int64) {
-        let newLebensmittelMenge = lebensmittel.ernaehrungsplan == nil ? LebensmittelMenge(context: DatabaseHelper.getInstance().getViewContext()) : lebensmittel.ernaehrungsplan!;
+        let newLebensmittelMenge = lebensmittel.ernaehrungsplan == nil ? LebensmittelMenge(context: DatabaseManager.getInstance().getViewContext()) : lebensmittel.ernaehrungsplan!;
         
         if(lebensmittel.ernaehrungsplan == nil) {
             newLebensmittelMenge.lebensmittel = lebensmittel;
@@ -53,7 +53,7 @@ class LebensmittelManager: ObservableObject {
             newLebensmittelMenge.menge += menge
         }
         
-        DatabaseHelper.getInstance().save()
+        DatabaseManager.getInstance().save()
     }
     
     func saveLebensmittel(name: String, kcal: String, mengeneinheit: Int64) -> String? {
@@ -78,14 +78,14 @@ class LebensmittelManager: ObservableObject {
         var lebensmittelPreselect:Lebensmittel? = parseLebensmittelByName(pName: name)
         
         if(lebensmittelPreselect == nil) {
-            lebensmittelPreselect = Lebensmittel(context: DatabaseHelper.getInstance().getViewContext());
+            lebensmittelPreselect = Lebensmittel(context: DatabaseManager.getInstance().getViewContext());
         }
         
         lebensmittelPreselect?.name = name;
         lebensmittelPreselect?.kcal = kcal;
         lebensmittelPreselect?.mengeneinheit = mengeneinheit + 1;
         
-        DatabaseHelper.getInstance().save()
+        DatabaseManager.getInstance().save()
     }
     
     func saveBMIHistory(gewicht: String, groesse: String) -> String? {
@@ -107,12 +107,12 @@ class LebensmittelManager: ObservableObject {
     }
     
     func saveBMIHistory(gewicht: Double, groesse: Int64) {
-        let bmiEintrag = BMIVerlauf(context: DatabaseHelper.getInstance().getViewContext());
+        let bmiEintrag = BMIVerlauf(context: DatabaseManager.getInstance().getViewContext());
         bmiEintrag.gewicht = gewicht
         bmiEintrag.groesse = groesse
         bmiEintrag.zeitpunkt = Date()
         
-        DatabaseHelper.getInstance().save()
+        DatabaseManager.getInstance().save()
     }
     
     
@@ -122,7 +122,7 @@ class LebensmittelManager: ObservableObject {
      */
     func requestLebensmittelMengeZeit() -> [LebensmittelMengeZeit] {
         do {
-            return try DatabaseHelper.getInstance().getViewContext().fetch(LebensmittelMengeZeit.fetchRequest())
+            return try DatabaseManager.getInstance().getViewContext().fetch(LebensmittelMengeZeit.fetchRequest())
         } catch {
             
         }
@@ -132,7 +132,7 @@ class LebensmittelManager: ObservableObject {
     
     func requestLebensmittel() -> [Lebensmittel] {
         do {
-            return try DatabaseHelper.getInstance().getViewContext().fetch(Lebensmittel.fetchRequest())
+            return try DatabaseManager.getInstance().getViewContext().fetch(Lebensmittel.fetchRequest())
         } catch {
             
         }

@@ -1,7 +1,7 @@
 import Foundation
 import CoreData
 
-struct LebensmittelHelper {
+class LebensmittelHelper {
     public static var kalProEinheitFormat = ["kcal pro 100g", "kcal pro 100ml", "kcal pro Stück"];
     
     public static func getEinheitDivisor(mengeneinheit: Int64) -> Int64 {
